@@ -22,7 +22,7 @@ One cohort; binary label ignores time-to-event and censoring; hyperparameters fi
 
 
 ## Corrections (added after gate review of tip 4c50fd50; earlier text kept, superseded claims marked)
-1. D9a was NOT a valid full-pipeline permutation. The embedding cache was keyed to the D2 folds, while permuted labels built new folds, so embeddings and labels were misaligned (the reviewer found test-set overlap of only 91/396 and 81/396). The reported "mean 0.501, autoencoder refit per fold" is not what was run and the claim is withdrawn. The gate's one corrected refit for permutation 0 gave AUROC 0.4955 (mine, same permutation, was 0.4988), which agrees with chance; I did not rerun D9a with a split-keyed cache. The conclusion (no signal under shuffled labels) holds on one corrected permutation only.
+1. D9a was NOT a valid full-pipeline permutation. The embedding cache was keyed to the D2 folds, while permuted labels built new folds, so embeddings and labels were misaligned (the reviewer found test-set overlap of only 91/396 and 81/396). The reported "mean 0.501, autoencoder refit per fold" is not what was run and the claim is withdrawn. The gate's one corrected refit for permutation 0 gave AUROC 0.4955 (mine, same permutation, was 0.4988), which agrees with chance; I did not rerun D9a with a split-keyed cache. One corrected permutation agrees with chance; that is not evidence of no signal in general, and the preregistered five-permutation gate was not completed.
 2. D4: ER alone is 0.505, so the confounder-adjusted part had little to adjust.
 3. Pooled AUROC (0.592) pools probabilities from 5 fold models; the fold-mean AUROC is 0.594, close to it.
 4. The bootstrap CI ignores dependence between folds (as disclosed above); treat it as optimistic.

@@ -205,5 +205,7 @@
    "n": 1979,
    "pos": 803
   }
- }
+ },
+ "d9a_withdrawn": true,
+ "d9a_withdrawn_reason": "Full-pipeline permutation check invalid as run: embedding cache keyed to D2 folds, permuted labels built new folds (misaligned). perm_mean/null_sane in the D9 block must not be used. One gate-corrected permutation gave AUROC 0.4955; the preregistered 5-permutation check was not completed. See RESULTS.md Corrections."
 }
