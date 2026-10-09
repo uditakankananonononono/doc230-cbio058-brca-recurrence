@@ -11,7 +11,7 @@ Did NOT reach the preregistered bar. D2 pooled out-of-fold AUROC 0.592 (bootstra
 - D6 treatment: chemotherapy/hormone/radio/surgery alone give AUROC 0.571 (gate 0.55 met: treatment is a material confound, i.e. as predictive as the embedding). Within hormone-therapy YES 0.593, NO 0.621.
 - D7 leakage: fitting variance filter and autoencoder on all samples gives 0.586 (-0.006 vs 0.592); no leakage effect.
 - D8 cohort: cohort identity predictable from the embedding at 0.468 vs majority 0.385; leave-one-cohort-out recurrence AUROC by held-out cohort 1: 0.612, 2: 0.574, 3: 0.580, 4: 0.663, 5: 0.570, mean 0.600; not cohort-dependent by the gate (it is as weak as the pooled result).
-- D9 null/biomarkers: full-pipeline permutation AUROC 0.501 (5 perms; sane). "Top-25 genes" (my definition in the prereg): held-out AUROC 0.568 vs 0.546 for 25 random genes from the same 2,000 (diff 0.022 < 0.05: NOT specific); mean pairwise Jaccard across folds 0.008 (gate 0.30: NOT stable). No support for a 25-gene biomarker list in this cohort and no external validation was attempted.
+- D9 null/biomarkers: [SUPERSEDED, see Corrections: the 0.501 permutation figure was not a valid full-pipeline check] permutation AUROC 0.501. "Top-25 genes" (my definition in the prereg): held-out AUROC 0.568 vs 0.546 for 25 random genes from the same 2,000 (diff 0.022 < 0.05: NOT specific); mean pairwise Jaccard across folds 0.008 (gate 0.30: NOT stable). No support for a 25-gene biomarker list in this cohort and no external validation was attempted.
 - D10 modality ablation (descriptive): expression-only 0.606, CNA-only 0.588, both 0.592.
 
 ## Net claim
@@ -19,3 +19,11 @@ In METABRIC (n=1,979), an AIME-style confounder-conditioned multi-omics embeddin
 
 ## Limits
 One cohort; binary label ignores time-to-event and censoring; hyperparameters fixed, no tuning (the autoencoder could be improved; not tried); 60-epoch AE, latent 32, RF 300 trees, single CV seed; bootstrap CI treats out-of-fold predictions as independent; the student's data and code unavailable. Disclosures: a crash-test run on permuted labels (400 patients, 1 epoch) preceded the prereg commit (in PREREG); the full run completed in one pass.
+
+
+## Corrections (added after gate review of tip 4c50fd50; earlier text kept, superseded claims marked)
+1. D9a was NOT a valid full-pipeline permutation. The embedding cache was keyed to the D2 folds, while permuted labels built new folds, so embeddings and labels were misaligned (the reviewer found test-set overlap of only 91/396 and 81/396). The reported "mean 0.501, autoencoder refit per fold" is not what was run and the claim is withdrawn. The gate's one corrected refit for permutation 0 gave AUROC 0.4955 (mine, same permutation, was 0.4988), which agrees with chance; I did not rerun D9a with a split-keyed cache. The conclusion (no signal under shuffled labels) holds on one corrected permutation only.
+2. D4: ER alone is 0.505, so the confounder-adjusted part had little to adjust.
+3. Pooled AUROC (0.592) pools probabilities from 5 fold models; the fold-mean AUROC is 0.594, close to it.
+4. The bootstrap CI ignores dependence between folds (as disclosed above); treat it as optimistic.
+5. Commit order is supported by the hash chain and log clock only (commit dates are author-set, no server time); the gates are unchanged after outcomes.
